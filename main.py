@@ -2,7 +2,7 @@ import vtk
 
 def main():
     reader = vtk.vtkNrrdReader()
-    reader.SetFileName("Data/case6_gre1.nrrd")
+    reader.SetFileName("Data/transformed_image.nrrd")
 
     window = vtk.vtkRenderWindow()
     renderer = vtk.vtkRenderer()
