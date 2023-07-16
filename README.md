@@ -8,6 +8,14 @@ Nous avons également implémenté le projet sur un VSC Share, ce qui fait que l
 
 ## Recalage d'image
 
+### Pre-traitements
+
+Avant de commencer le recalage, nous avons effectué plusieurs pre-traitements afin de pouvoir avoir des images plus propres et donc plus facilement recalables.
+
+Nous avons donc effectué les pre-traitements suivants :
+- itk.median_image_filter : permet de supprimer les bruits de l'image
+- itk.ResampleImageFilter : permet de redimensionner l'image afin d'avoir des images de même taille
+
 ### Approche initiale: transformation rigide
 
 Dans un premier temps, nous sommes parti sur une transformation rigide pour notre recalage d'image.
@@ -40,3 +48,23 @@ Voici donc plusieurs exemples de ces images :
 ![](md_images/recalage_36.png)
 
 ## Segmentation
+
+### Approche initiale: segmentation par seuillage automatique
+
+Dans un premier temps, nous avons implémenté une segmentation par seuillage automatique. Cependant, nous nous sommes confrontés à un problème : l'API n'était pas assez complète pour nous permettre de faire une segmentation automatique et depasser les problemes d'execution rencontres.
+
+Pour gagner du temps, nous avons donc décidé de nous diriger vers une autre approche.
+
+### Approche finale: segmentation par seuillage manuel
+
+L'approche finalement utilisée est une segmentation par seuillage manuel. En effet, avec ce type de segmentation, nous avons pu contourner les problèmes d'API puisque l'utilisation de la fonction itk.ConnectedThresholdImageFilter a fonctionne sans problème.
+
+Il a fallu choisir un seuil par axe (x, y, z) afin de pouvoir segmenter correctement l'image. Voici le résultat obtenu :
+
+![](md_images/segmentation.png)
+
+Il a fallu ensuite selectionne les tranches qui nous intéressaient afin de pouvoir les afficher. et detourer la tumeur une fois identifiee. Voici le résultat obtenu :
+
+![](md_images/segmentation2.png)
+![](md_images/segmentation3.png)
+
