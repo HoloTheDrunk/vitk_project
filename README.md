@@ -21,50 +21,50 @@ Nous avons donc effectué les pre-traitements suivants :
 Dans un premier temps, nous sommes parti sur une transformation rigide pour notre recalage d'image.
 Cependant, nous nous sommes confrontés à un problème : des rotations non désirées intervenaient dans le processus de transformation.
 
+La solution était donc toute trouvée : nous avons utilisé une transformation limitée à la translation.
 Après plusieurs recherches, un des possibles problèmes était la transformation rigide. Nous nous sommes donc dirigés vers un autre type de transformation.
 
 ### Approche finale: transformation par translation
 
-L'approche finalement utilisée est une transformation par translation. En effet, avec ce type de transformation notre probleme de rotation de l'image pendant la transformation.
+Avec ce type de transformation notre probleme de rotation de l'image pendant la transformation disparaît.
 
-Egalement, pour atteindre tout cela, nous utilisons une registration avec les étapes suivantes :
-- un optimizer : itk.RegularStepGradientDescentOptimizerv4
-- des metrics: itk.MeanSquaresImageToImageMetricv4
-- et enfin un registration: itk.ImageRegistrationMethodv4
+Notre recalage utilise les éléments suivants:
+- un optimiseur : itk.RegularStepGradientDescentOptimizerv4
+- une métrique  : itk.MeanSquaresImageToImageMetricv4
 
-### Illustration
+### Visualisation
 
-Pour illustrer notre recalage, nous avons ajouté des sliders interactifs afin de pouvoir visualiser les différentes tranches.
+Pour mieux visualiser les différentes étapes, nous avons ajouté des plots avec sliders afin de pouvoir visualiser les différentes tranches.
 
-Nous avons 3 sliders et donc 3 images :
 - Fixed image : image de base sans recalage
 - Moving image : image sur laquelle on veut se recaler
 - Transformed image : image recalée
 
-Voici donc plusieurs exemples de ces images :
-
-![](md_images/recalage_88.png)
 ![](md_images/recalage_2.png)
-![](md_images/recalage_36.png)
 
 ## Segmentation
 
 ### Approche initiale: segmentation par seuillage automatique
 
-Dans un premier temps, nous avons implémenté une segmentation par seuillage automatique. Cependant, nous nous sommes confrontés à un problème : l'API n'était pas assez complète pour nous permettre de faire une segmentation automatique et depasser les problemes d'execution rencontres.
+Dans un premier temps, nous avons implémenté une segmentation par seuillage automatique. Cependant, déterminer un seuil convenable automatiquement prenait plus de temps que de le faire à la main.
 
 Pour gagner du temps, nous avons donc décidé de nous diriger vers une autre approche.
 
 ### Approche finale: segmentation par seuillage manuel
 
-L'approche finalement utilisée est une segmentation par seuillage manuel. En effet, avec ce type de segmentation, nous avons pu contourner les problèmes d'API puisque l'utilisation de la fonction itk.ConnectedThresholdImageFilter a fonctionne sans problème.
+L'approche finalement utilisée est une segmentation par seuillage manuel. En effet, avec ce type de segmentation, nous avons pu contourner les problèmes d'API puisque l'utilisation de la fonction itk.ConnectedThresholdIimageFilter n'a pas rencontré de problème.
 
-Il a fallu choisir un seuil par axe (x, y, z) afin de pouvoir segmenter correctement l'image. Voici le résultat obtenu :
+Une fois ce seuil choisi, il ne restait plus qu'à l'utiliser en masque :
 
 ![](md_images/segmentation.png)
 
-Il a fallu ensuite selectionne les tranches qui nous intéressaient afin de pouvoir les afficher. et detourer la tumeur une fois identifiee. Voici le résultat obtenu :
+La dernière étape a consisté en une sélection manuelle d'une *bounding box* contenant la tumeur sur toutes les slices.
 
 ![](md_images/segmentation2.png)
 ![](md_images/segmentation3.png)
 
+## Résultat
+
+Nous obtenons à la fin une augmentation de volume de 13.1% et une augmentation de l'intensité des voxels de 10.9%.
+
+![](md_images/final.png)
